@@ -28,7 +28,12 @@ func recoverHandler(next http.Handler) http.Handler {
 }
 
 func authHandler(next http.Handler) http.Handler {
-
+	fn := func(w http.ResponseWriter, r *http.Request) {
+		switch r.URL.Path {
+		case "/restricted", "/logout", "/deleteUser":
+		default:
+		}
+	}
 }
 
 func logicHandler(w http.ResponseWriter, r *http.Request) {
