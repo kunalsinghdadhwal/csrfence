@@ -5,7 +5,7 @@ import (
 
 	"github.com/kunalsinghdadhwal/csrfence/db"
 	"github.com/kunalsinghdadhwal/csrfence/server"
-	myjwt "github.com/kunalsinghdadhwal/csrfence/server/middleware/myJwt"
+	myJwt "github.com/kunalsinghdadhwal/csrfence/server/middleware/myJwt"
 )
 
 var host = "localhost"
@@ -15,7 +15,7 @@ func main() {
 
 	db.InitDB()
 
-	jwtErr := myjwt.InitJWT()
+	jwtErr := myJwt.InitJWT()
 
 	if jwtErr != nil {
 		log.Println("Error Initializing the JWT")

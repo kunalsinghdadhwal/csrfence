@@ -11,3 +11,4 @@
 vendor/
 
 keys/app.rsa
+keys/app.rsa.pem
