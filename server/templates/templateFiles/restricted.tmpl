@@ -1,20 +1,267 @@
-<html>
+<html lang="en">
 	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Super Secret Area</title>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
 		<meta content="{{ .CsrfSecret }}" name="csrf-token" />
+		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 	</head>
 
 	<body>
-		<h1>Welcome to the super secret area</h1>
-		<h3>Your secret message is: {{ .SecretMessage }}</h3>
-		<br><br>
-		<form name="logout" action="/logout" method="POST">
-			<input hidden name="X-CSRF-Token" value="{{ .CsrfSecret }}" />
-			<input type="submit" value="Log Out" />
-		</form>
-		<form name="deleteUser" action="/deleteUser" method="POST">
-			<input hidden name="X-CSRF-Token" value="{{ .CsrfSecret }}" />
-			<input type="submit" value="Delete User" />
-		</form>
+		<div class="container">
+			<div class="secret-card">
+				<div class="header">
+					<div class="lock-icon">
+						<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+							<rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+							<path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+						</svg>
+					</div>
+					<h1 class="title">Welcome to the super secret area</h1>
+					<div class="secure-badge">
+						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+							<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+							<path d="m9 12 2 2 4-4"></path>
+						</svg>
+						<span>Secure Connection</span>
+					</div>
+				</div>
+				
+				<div class="message-container">
+					<div class="message-label">Your secret message is:</div>
+					<div class="secret-message">{{ .SecretMessage }}</div>
+				</div>
+				
+				<div class="divider"></div>
+				
+				<div class="actions">
+					<form name="logout" action="/logout" method="POST">
+						<input hidden name="X-CSRF-Token" value="{{ .CsrfSecret }}" />
+						<button type="submit" class="btn btn-primary">
+							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+								<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+								<polyline points="16 17 21 12 16 7"></polyline>
+								<line x1="21" y1="12" x2="9" y2="12"></line>
+							</svg>
+							Log Out
+						</button>
+					</form>
+					<form name="deleteUser" action="/deleteUser" method="POST">
+						<input hidden name="X-CSRF-Token" value="{{ .CsrfSecret }}" />
+						<button type="submit" class="btn btn-danger">
+							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+								<path d="M3 6h18"></path>
+								<path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+								<path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+								<line x1="10" y1="11" x2="10" y2="17"></line>
+								<line x1="14" y1="11" x2="14" y2="17"></line>
+							</svg>
+							Delete User
+						</button>
+					</form>
+				</div>
+				
+				<div class="footer">
+					<div class="timestamp">
+						<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+							<circle cx="12" cy="12" r="10"></circle>
+							<polyline points="12 6 12 12 16 14"></polyline>
+						</svg>
+						Last accessed: <span id="timestamp"></span>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<style>
+			:root {
+				--bg-color: #0f172a;
+				--card-bg: #1e293b;
+				--text-color: #e2e8f0;
+				--text-muted: #94a3b8;
+				--primary-color: #3b82f6;
+				--primary-hover: #2563eb;
+				--danger-color: #ef4444;
+				--danger-hover: #dc2626;
+				--border-color: #334155;
+				--message-bg: #0f172a;
+			}
+
+			* {
+				box-sizing: border-box;
+				margin: 0;
+				padding: 0;
+			}
+
+			html, body {
+				height: 100%;
+				width: 100%;
+				font-family: 'Inter', sans-serif;
+				background-color: var(--bg-color);
+				color: var(--text-color);
+				line-height: 1.5;
+			}
+
+			.container {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				min-height: 100vh;
+				padding: 1.5rem;
+			}
+
+			.secret-card {
+				background-color: var(--card-bg);
+				border-radius: 1rem;
+				box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+				width: 100%;
+				max-width: 550px;
+				padding: 2.5rem;
+				position: relative;
+				overflow: hidden;
+			}
+
+			.secret-card::before {
+				content: '';
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 4px;
+				background: linear-gradient(to right, var(--primary-color), #8b5cf6);
+			}
+
+			.header {
+				text-align: center;
+				margin-bottom: 2rem;
+				position: relative;
+			}
+
+			.lock-icon {
+				display: flex;
+				justify-content: center;
+				margin-bottom: 1rem;
+				color: var(--primary-color);
+			}
+
+			.title {
+				font-size: 1.5rem;
+				font-weight: 700;
+				margin-bottom: 0.75rem;
+				color: var(--text-color);
+			}
+
+			.secure-badge {
+				display: inline-flex;
+				align-items: center;
+				gap: 0.375rem;
+				background-color: rgba(59, 130, 246, 0.1);
+				color: var(--primary-color);
+				padding: 0.375rem 0.75rem;
+				border-radius: 9999px;
+				font-size: 0.75rem;
+				font-weight: 500;
+			}
+
+			.message-container {
+				background-color: var(--message-bg);
+				border-radius: 0.75rem;
+				padding: 1.5rem;
+				margin-bottom: 2rem;
+				border: 1px solid var(--border-color);
+			}
+
+			.message-label {
+				font-size: 0.875rem;
+				color: var(--text-muted);
+				margin-bottom: 0.5rem;
+			}
+
+			.secret-message {
+				font-size: 1.125rem;
+				font-weight: 500;
+				word-break: break-word;
+			}
+
+			.divider {
+				height: 1px;
+				background-color: var(--border-color);
+				margin: 2rem 0;
+			}
+
+			.actions {
+				display: flex;
+				gap: 1rem;
+				margin-bottom: 1.5rem;
+			}
+
+			.btn {
+				display: flex;
+				align-items: center;
+				gap: 0.5rem;
+				padding: 0.75rem 1.25rem;
+				border-radius: 0.5rem;
+				font-size: 0.875rem;
+				font-weight: 500;
+				border: none;
+				cursor: pointer;
+				transition: all 0.2s ease;
+			}
+
+			.btn-primary {
+				background-color: var(--primary-color);
+				color: white;
+			}
+
+			.btn-primary:hover {
+				background-color: var(--primary-hover);
+			}
+
+			.btn-danger {
+				background-color: rgba(239, 68, 68, 0.1);
+				color: var(--danger-color);
+				border: 1px solid var(--danger-color);
+			}
+
+			.btn-danger:hover {
+				background-color: var(--danger-color);
+				color: white;
+			}
+
+			.footer {
+				display: flex;
+				justify-content: center;
+			}
+
+			.timestamp {
+				display: flex;
+				align-items: center;
+				gap: 0.375rem;
+				color: var(--text-muted);
+				font-size: 0.75rem;
+			}
+
+			@media (max-width: 640px) {
+				.secret-card {
+					padding: 1.5rem;
+				}
+				
+				.actions {
+					flex-direction: column;
+				}
+				
+				.btn {
+					width: 100%;
+					justify-content: center;
+				}
+			}
+		</style>
+
+		<script>
+			// Display current timestamp
+			const now = new Date();
+			document.getElementById('timestamp').textContent = now.toLocaleString();
+		</script>
 	</body>
 </html>

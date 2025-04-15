@@ -1,56 +1,212 @@
-<html>
+<html lang="en">
 	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Login</title>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/components/core-min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/components/sha256-min.js"></script>
+		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 	</head>
 
 	<body>
-		<div id="login">
-			<h1>Login</h1>
-			<form id="fakeLogin" name="fakeLogin" onsubmit="return DoSubmit();">
-				<input class="fullWidth" name="username" type="text" placeholder="username" />
-				<input class="fullWidth" name="password" type="password" placeholder="password" />
-
-				<input type="Submit" value="Login" />
-			</form>
-			<form style="display: none;" id="realLogin" name="realLogin" action="/login" method="POST">
-				<input class="fullWidth" name="username" type="text" placeholder="username" />
-				<input class="fullWidth" name="password" type="password" placeholder="password" />
-			</form>
-			<form id="restricted" name="restricted" action="/restricted" method="POST" style="display: none;">
-				<input id="X-CSRF-Token-input" name="X-CSRF-Token" />
-			</form>
+		<div class="container">
+			<div class="login-card">
+				<h1 class="title">Welcome Back</h1>
+				<p class="subtitle">Please enter your credentials to login</p>
+				
+				<div id="login">
+					<form id="fakeLogin" name="fakeLogin" onsubmit="return DoSubmit();">
+						<div class="input-group">
+							<label for="username">Username</label>
+							<input class="input-field" id="username" name="username" type="text" placeholder="Enter your username" />
+						</div>
+						<div class="input-group">
+							<label for="password">Password</label>
+							<input class="input-field" id="password" name="password" type="password" placeholder="Enter your password" />
+						</div>
+						<div class="remember-forgot">
+							<div class="remember">
+								<input type="checkbox" id="remember" />
+								<label for="remember">Remember me</label>
+							</div>
+							<a href="#" class="forgot-link">Forgot password?</a>
+						</div>
+						<button type="submit" class="login-button">Login</button>
+					</form>
+					<form style="display: none;" id="realLogin" name="realLogin" action="/login" method="POST">
+						<input name="username" type="text" />
+						<input name="password" type="password" />
+					</form>
+					<form id="restricted" name="restricted" action="/restricted" method="POST" style="display: none;">
+						<input id="X-CSRF-Token-input" name="X-CSRF-Token" />
+					</form>
+				</div>
+			</div>
 		</div>
 
 		<style>
+			:root {
+				--primary-color: #4f46e5;
+				--primary-hover: #4338ca;
+				--text-color: #1f2937;
+				--text-light: #6b7280;
+				--background: #f9fafb;
+				--card-bg: #ffffff;
+				--border-color: #e5e7eb;
+				--input-bg: #f3f4f6;
+				--input-focus: #e0e7ff;
+				--shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+			}
+
+			* {
+				box-sizing: border-box;
+				margin: 0;
+				padding: 0;
+			}
+
 			html, body {
 				height: 100%;
 				width: 100%;
-				
-				margin: 0px;
-				padding: 0px;
+				font-family: 'Inter', sans-serif;
+				background-color: var(--background);
+				color: var(--text-color);
+			}
+
+			.container {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				min-height: 100vh;
+				padding: 1rem;
+			}
+
+			.login-card {
+				background-color: var(--card-bg);
+				border-radius: 1rem;
+				box-shadow: var(--shadow);
+				width: 100%;
+				max-width: 420px;
+				padding: 2.5rem;
+				text-align: center;
+				transition: transform 0.3s ease;
+			}
+
+			.login-card:hover {
+				transform: translateY(-5px);
+			}
+
+			.logo {
+				display: flex;
+				justify-content: center;
+				margin-bottom: 1.5rem;
+			}
+
+			.logo-icon {
+				color: var(--primary-color);
+			}
+
+			.title {
+				font-size: 1.5rem;
+				font-weight: 700;
+				margin-bottom: 0.5rem;
+				color: var(--text-color);
+			}
+
+			.subtitle {
+				color: var(--text-light);
+				margin-bottom: 2rem;
+				font-size: 0.875rem;
 			}
 
 			#login {
-				text-align: center;
-
-				width: 75%;
-				max-width: 600px;
-
-				margin: 0 auto;
-			}
-
-			.fullWidth {
 				width: 100%;
 			}
 
-			input {
-				margin-top: 5px;
+			.input-group {
+				margin-bottom: 1.25rem;
+				text-align: left;
 			}
 
-			h1 {
-				margin-top: 25px;
+			label {
+				display: block;
+				margin-bottom: 0.5rem;
+				font-size: 0.875rem;
+				font-weight: 500;
+			}
+
+			.input-field {
+				width: 100%;
+				padding: 0.75rem 1rem;
+				border: 1px solid var(--border-color);
+				border-radius: 0.5rem;
+				background-color: var(--input-bg);
+				font-size: 1rem;
+				transition: all 0.2s ease;
+			}
+
+			.input-field:focus {
+				outline: none;
+				border-color: var(--primary-color);
+				background-color: var(--input-focus);
+				box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+			}
+
+			.remember-forgot {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				margin-bottom: 1.5rem;
+				font-size: 0.875rem;
+			}
+
+			.remember {
+				display: flex;
+				align-items: center;
+			}
+
+			.remember input {
+				margin-right: 0.5rem;
+			}
+
+			.forgot-link {
+				color: var(--primary-color);
+				text-decoration: none;
+				transition: color 0.2s ease;
+			}
+
+			.forgot-link:hover {
+				color: var(--primary-hover);
+				text-decoration: underline;
+			}
+
+			.login-button {
+				width: 100%;
+				padding: 0.75rem;
+				background-color: var(--primary-color);
+				color: white;
+				border: none;
+				border-radius: 0.5rem;
+				font-size: 1rem;
+				font-weight: 500;
+				cursor: pointer;
+				transition: background-color 0.2s ease;
+			}
+
+			.login-button:hover {
+				background-color: var(--primary-hover);
+			}
+
+			@media (max-width: 480px) {
+				.login-card {
+					padding: 1.5rem;
+				}
+				
+				.remember-forgot {
+					flex-direction: column;
+					align-items: flex-start;
+					gap: 0.75rem;
+				}
 			}
 		</style>
 
@@ -70,20 +226,6 @@
 						console.log("Success! The token is: ", token);
 						$("#X-CSRF-Token-input").val(token);
 						$("#restricted").submit();
-
-						// $.ajax({
-						// 	'url': 		"/restricted",
-						// 	'headers': 	{ 'X-CSRF-Token' : token },             
-						// 	'type': 	"GET",
-						// 	success: function(data, textStatus, request) {
-						// 		console.log("Success the 2nd time!");
-						// 		console.log(data, textStatus, request)
-						// 	},
-						// 	error: function (request, textStatus, errorThrown) {
-						// 		console.log("Error the 2nd time!");
-						// 		console.log(request, textStatus, errorThrown)
-						// 	}
-						// });
 					},
 					error: function (request, textStatus, errorThrown) {
 						console.log("Error!", request.getResponseHeader('X-CSRF-Token'));
