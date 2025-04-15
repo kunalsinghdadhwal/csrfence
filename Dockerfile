@@ -16,6 +16,8 @@ USER appuser
 COPY . /app
 COPY --from=builder /build/main /app/
 
+RUN chown 
+
 WORKDIR /app
 EXPOSE 42069 
 CMD ["./main"]

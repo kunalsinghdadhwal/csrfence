@@ -240,7 +240,7 @@ func CheckAndRefreshTokens(oldAuthTokenString string, oldRefreshTokenString stri
 				return
 			}
 
-			newRefreshTokenString, err = u(oldRefreshTokenString)
+			newRefreshTokenString, err = updateRefreshTokenExp(oldRefreshTokenString)
 			if err != nil {
 				return
 			}

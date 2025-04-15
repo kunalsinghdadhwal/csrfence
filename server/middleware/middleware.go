@@ -13,6 +13,7 @@ import (
 )
 
 func NewHandler() http.Handler {
+
 	return alice.New(recoverHandler, authHandler).ThenFunc(logicHandler)
 }
 
@@ -53,7 +54,7 @@ func authHandler(next http.Handler) http.Handler {
 			if refreshErr == http.ErrNoCookie {
 				log.Println("Unauthorized attempt, No Refresh Cookie")
 				nullifyTokenCookies(&w, r)
-				http.Error(w, r, "/login", http.StatusFound)
+				http.Redirect(w, r, "/login", http.StatusFound)
 				return
 			} else if refreshErr != nil {
 				log.Panic("Panic: %+v", refreshErr)
@@ -168,7 +169,7 @@ func logicHandler(w http.ResponseWriter, r *http.Request) {
 	case "/deleteUser":
 		log.Println("Deleting User")
 
-		AuthCookie, authErr := r.cookie("AuthToken")
+		AuthCookie, authErr := r.Cookie("AuthToken")
 		if authErr == http.ErrNoCookie {
 			log.Println("Unauthorized attempt, No Auth Cookie")
 			nullifyTokenCookies(&w, r)

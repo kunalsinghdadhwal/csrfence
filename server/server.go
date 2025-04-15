@@ -4,7 +4,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/gofiber/fiber/middleware"
+	"github.com/kunalsinghdadhwal/csrfence/server/middleware"
 )
 
 func StartServer(hostname string, port string) error {
