@@ -110,7 +110,7 @@ func GrabUUID(authTokenString string) (string, error) {
 	return authTokenClaims.StandardClaims.Subject, nil
 }
 
-func updateRefreshTokenCsrf(oldRefreshTokenString string, newCsrfString string) (newRefreshTokenString string, error) {
+func updateRefreshTokenCsrf(oldRefreshTokenString string, newCsrfString string) (newRefreshTokenString string, err error) {
 	refreshToken, _ := jwt.ParseWithClaims(oldRefreshTokenString, &models.TokenClaims{}, func(token *jwt.Token) (interface{}, error) {
 		return verifyKey, nil
 	})
@@ -188,12 +188,12 @@ func updateAuthTokenString(refreshTokenString string, oldAuthTokenString string)
 			log.Println("Refresh Token has Expired")
 			db.DeleteRefreshToken(refreshTokenClaims.StandardClaims.Id)
 
-			err = errors.New("unauthorized")
+			err = errors.New("Unauthorized")
 			return
 		}
 	} else {
 		log.Println("Refresh token revoked")
-		err = errors.New("unauthorized")
+		err = errors.New("Unauthorized")
 		return
 	}
 }
@@ -202,7 +202,7 @@ func CheckAndRefreshTokens(oldAuthTokenString string, oldRefreshTokenString stri
 
 	if oldCsrfSecret == "" {
 		log.Println("No CSRF Token")
-		err = errors.New("unauthorized")
+		err = errors.New("Unauthorized")
 		return
 	}
 
@@ -219,7 +219,7 @@ func CheckAndRefreshTokens(oldAuthTokenString string, oldRefreshTokenString stri
 
 	if oldCsrfSecret != authTokenClaims.Csrf {
 		log.Println("CSRF Token Mismatch")
-		err = errors.New("unauthorized")
+		err = errors.New("Unauthorized")
 		return
 	}
 
@@ -240,7 +240,7 @@ func CheckAndRefreshTokens(oldAuthTokenString string, oldRefreshTokenString stri
 				return
 			}
 
-			newRefreshTokenString, err = updateRefreshTokenString(oldRefreshTokenString)
+			newRefreshTokenString, err = u(oldRefreshTokenString)
 			if err != nil {
 				return
 			}
@@ -249,7 +249,7 @@ func CheckAndRefreshTokens(oldAuthTokenString string, oldRefreshTokenString stri
 			return
 		} else {
 			log.Println("Auth Token is Invalid")
-			err = errors.New("unauthorized")
+			err = errors.New("Unauthorized")
 			return
 		}
 	} else {
@@ -258,7 +258,7 @@ func CheckAndRefreshTokens(oldAuthTokenString string, oldRefreshTokenString stri
 		return
 	}
 
-	err = errors.New("unauthorized")
+	err = errors.New("Unauthorized")
 	return
 }
 
