@@ -8,6 +8,9 @@ import (
 )
 
 type User struct {
+	Username,
+	PasswordHash,
+	Role string
 }
 
 type TokenClaims struct {
