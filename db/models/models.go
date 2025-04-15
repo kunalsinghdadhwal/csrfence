@@ -23,5 +23,5 @@ const RefreshTokenValidTime = time.Hour * 72
 const AuthTokenValidTime = time.Hour
 
 func GenerateCSRFSecret() (string, error) {
-	return randomstrings.GenerateRamdonString(64)
+	return randomstrings.GenerateRamdonString(32)
 }

@@ -6,6 +6,7 @@ require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/gofiber/fiber v1.14.6
 	github.com/justinas/alice v1.2.0
+	golang.org/x/crypto v0.0.0-20190308221718-c2843e01d9a2
 )
 
 require (
