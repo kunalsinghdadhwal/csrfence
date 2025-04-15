@@ -23,10 +23,10 @@ cd csrfence
 # The project needs rsa keys for jwt token generation
 
 # Private Key
-openssl genpkey -algorithm RSA -out app.rsa.pem -pkeyopt rsa_keygen_bits:4096
+openssl genpkey -algorithm RSA -out keys/app.rsa.pem -pkeyopt rsa_keygen_bits:4096
 
 # Public Key
-openssl rsa -pubout -in app.rsa.pem -out app.rsa_pub.pem
+openssl rsa -pubout -in keys/app.rsa.pem -out keys/app.rsa_pub.pem
 ```
 
 ### Build & Run
